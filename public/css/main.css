@@ -1,0 +1,38 @@
+:root {
+    --primary-color: #386641;
+    --secondary-color: #F97A00;
+    --tertiary-color: #FED16A;
+    --quad-color: #FFF4A4;
+
+    --primary-bg-color: #FFF;
+    --secondary-bg-color: #EEEEEE;
+
+    --primary-font: "TikTok Sans", sans-serif;
+    --secondary-font: "Roboto", sans-serif;
+    --tertiary-font: "Nata Sans", sans-serif;
+
+    --font-basic: #000; 
+    --font-info: #00809D;
+    --font-warning: #F97A00;
+    --font-error: #D92C54;
+}
+
+body {
+    font-family: var(--primary-font);
+    line-height: 1.6;
+    color: var(--font-basic);
+    background-color: var(--primary-bg-color);
+    margin: 0;
+    padding: 0;
+}
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s;
+}
