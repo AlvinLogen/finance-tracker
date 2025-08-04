@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Track your person finances, manage expense and monitor your budgets.">
+    <meta name="description" content="Track your personal finances, manage expense and monitor your budgets.">
     <meta name="keywords" content="finance tracker, budget management, expense tracking, personal finances.">
     <meta name="author" content="Alvin Logenstein">
-    <meta name="theme-color" content="#2c3e050" >
+    <meta name="theme-color" content="#2c3e050">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -18,17 +18,42 @@
     <script src="./scripts/app.js" defer></script>
     <script src="./scripts/services.js" defer></script>
     <script src="./scripts/utils.js" defer></script>
-    <title>Finance Tracker</title>
+    <title>FinView</title>
 </head>
 
 <body>
     <header role="banner">
-        <h1>Finance Tracker</h1>
+        <h1>FinView</h1>
         <nav id="main-nav" role="navigation" aria-label="Main Navigation"></nav>
     </header>
 
     <main role="dashboard" id="main-content" aria-label="Financial Dashboard">
-        <section id="dashboard"></section>
+        <section id="dashboard">
+            <h2>Finance Overview</h2>
+
+            <div class="dashboard-grid">
+                <div class="finance-card finance-card--income">
+                    <h3>Total Income</h3>
+                    <p class="card-amount">0.00</p>
+                    <p class="card-subtitle">This Month</p>
+                </div>
+                <div class="finance-card finance-card--expense">
+                    <h3>Total Expenses</h3>
+                    <p class="card-amount">0.00</p>
+                    <p class="card-subtitle">This Month</p>
+                </div>
+                <div class="finance-card finance-card--budget">
+                    <h3>Budget Status</h3>
+                    <p class="card-amount">0.00</p>
+                    <p class="card-subtitle">Remaining</p>
+                </div>
+                <div class="finance-card finance-card--savings">
+                    <h3>Savings Goal</h3>
+                      <p class="card-amount">0.00</p>
+                    <p class="card-subtitle">Progress</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer role="contentinfo">

@@ -58,8 +58,8 @@ const server = http.createServer(async (req, res) => {
 
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Test Endpoint: http://localhost:3000/api/test`);
+    console.log(`Test Endpoint: http://localhost:${PORT}/api/test`);
 });
