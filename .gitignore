@@ -1,6 +1,6 @@
 # Environment and Security
 .env
-config.js
+database/config.js
 .env.local
 .env.staging
 .env.production
