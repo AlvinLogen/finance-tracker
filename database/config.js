@@ -1,7 +1,7 @@
 const db_config = {
     server: process.env.DB_SERVER || "10.0.0.19",
-    database: process.env.DB_NAME || "ExpenseTracker",
-    user: process.env.DB_USER || "ExpenseTracker",
+    database: process.env.DB_NAME || "FinanceTracker",
+    user: process.env.DB_USER || "svc_db_app",
     password: process.env.DB_PASSWORD || "1Hi5g#3I4",
     options: {
         encrypt: false,
