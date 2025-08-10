@@ -1,5 +1,30 @@
+# Environment and Security
 .env
 config.js
+.env.local
+.env.staging
+.env.production
+
+# Personal Learning Documentation
+README_DEVJOURNEY.md
+LEARNING_NOTES.md
+PERSONAL_TODO.md
+
+# Dependencies
+node_modules/
 package-lock.json
 
-node_modules
+# Development Files
+.vscode/settings.json
+*.log
+*.tmp
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Build/Distribution
+dist/
+build/
+*.min.js
+*.min.css
