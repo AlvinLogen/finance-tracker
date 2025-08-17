@@ -45,7 +45,7 @@ async function testConnection() {
         const result = await pool.request().query`SELECT GETDATE() as serverTime`;
         return result.recordset[0];
     } catch (error) {
-        console.error('❌ Database test failed:', error.message);
+        console.error('Database test failed:', error.message);
         throw error;
     }
 }
