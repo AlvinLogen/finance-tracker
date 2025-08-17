@@ -30,3 +30,6 @@ dist/
 build/
 *.min.js
 *.min.css
+
+#Other
+db_config.js
