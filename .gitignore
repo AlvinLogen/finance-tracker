@@ -32,6 +32,3 @@ build/
 *.min.css
 
 db_config.js
-
-
-db_config.js
