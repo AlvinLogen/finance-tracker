@@ -31,4 +31,4 @@ build/
 *.min.js
 *.min.css
 
-db_config.js
+backend/config/db_config.js
