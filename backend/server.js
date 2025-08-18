@@ -2,22 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const { testConnection } = require('./config/db_connection');
 
-const dashboardRoutes = require('./api/dashboard');
+const settings = require("./config/settings");
+const dashboardRoutes = require(`.${settings.api.baseURL}/dashboard`);
 
 const app = express();
-const PORT = 3001;
 
-app.use(cors({
-    origin: 'http://127.0.0.1:5500',
-    credentials: true
-}));
-
+//Settings Configuration
+app.use(cors(settings.cors))
 app.use(express.json());
 
 //Routes
-app.use('/api', dashboardRoutes);
+app.use(settings.api.baseURL, dashboardRoutes);
 
-app.get('/api/test', async (req, res) => {
+app.get(`${settings.api.baseURL}/test`, async (req, res) => {
     try {
         const dbTest = await testConnection();
         res.json({
@@ -35,33 +32,8 @@ app.get('/api/test', async (req, res) => {
     }
 });
 
-//Health Check
-app.get('/health', async(req, res) => {
-    try {
-        const dbTest = await testConnection();
-        res.json({
-            status: 'healthy',
-            database: 'connected',
-            serverTime: dbTest.serverTime
-        });
-    } catch (error) {
-        res.status(503).json({
-            status: 'unhealthy',
-            error: 'Database connection failed'
-        });
-    }
-});
-
-app.listen(PORT, async () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Test Endpoint Health Check: http://localhost:${PORT}/health`);
-    console.log(`Test Endpoint: http://localhost:${PORT}/api/test`);
-    console.log(`API Endpoint: http://localhost:${PORT}/api/dashboard/summary/1`);
-
-    try {
-        await testConnection();
-        console.log('✅ Database connection verified');
-    } catch (error) {
-        console.log('Database connection failed - check your config');
-    }    
+app.listen(settings.server.port, async () => {
+    console.log(`Server running at http://${settings.server.host}:${settings.server.port}`);
+    console.log(`Test Endpoint: http://${settings.server.host}:${settings.server.port}${settings.api.baseURL}/test`);  
+    console.log(`Dashboard: http://localhost:${settings.server.port}/api/dashboard/summary/1`);
 });
