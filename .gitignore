@@ -1,13 +1,16 @@
 # Environment and Security
 .env
+config.js
 .env.local
 .env.staging
 .env.production
 
 # Personal Learning Documentation
 README_DEVJOURNEY.md
+README_GITHUB.md
 LEARNING_NOTES.md
 PERSONAL_TODO.md
+GIT_BRANCHING_AND_DEPLOYMENT.md
 
 # Dependencies
 node_modules/
@@ -27,6 +30,5 @@ dist/
 build/
 *.min.js
 *.min.css
-
 
 db_config.js
