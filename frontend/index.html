@@ -49,10 +49,58 @@
                 </div>
                 <div class="finance-card finance-card--savings">
                     <h3>Savings Goal</h3>
-                      <p class="card-amount">0.00</p>
+                    <p class="card-amount">0.00</p>
                     <p class="card-subtitle">Progress</p>
                 </div>
             </div>
+        </section>
+
+        <section id="transactions">
+            <h2>Recent Transactions</h2>
+
+            <div class="transaction-form-container">
+                <h3>Add New Transaction</h3>
+                <form id="add-transaction-form" class="transaction-form">
+                    <div class="form-group">
+                        <label for="transaction-type">Type:</label>
+                        <select id="transaction-type" name="transactionType" required>
+                            <option value="">Select Type</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                    </div>
+
+                    <div id="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" required/>
+                    </div>
+
+                    <div id="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" maxlength="255" required/>
+                    </div>
+                    <div id="form-group">
+                        <label for="transaction-date">Date:</label>
+                        <input type="date" id="transaction-date" name="transactionDate" required/>
+                    </div>
+                    <div id="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="categoryId" required>
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+
+            <div class="transactions-list-container">
+                <h3>Transaction History</h3>
+                <div id="transactions-list" class="transactions-list">
+                    
+                </div>
+            </div>
+
         </section>
     </main>
 

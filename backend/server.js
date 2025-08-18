@@ -3,7 +3,10 @@ const cors = require('cors');
 const { testConnection } = require('./config/db_connection');
 
 const settings = require("./config/settings");
+
+//Route Files
 const dashboardRoutes = require(`.${settings.api.baseURL}/dashboard`);
+const transactionRoutes = require(`.${settings.api.baseURL}/transactions`);
 
 const app = express();
 
@@ -13,6 +16,7 @@ app.use(express.json());
 
 //Routes
 app.use(settings.api.baseURL, dashboardRoutes);
+app.use(settings.api.baseURL, transactionRoutes);
 
 app.get(`${settings.api.baseURL}/test`, async (req, res) => {
     try {
