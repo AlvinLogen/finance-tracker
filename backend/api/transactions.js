@@ -1,29 +1,27 @@
-const express = require("express");
-const { executeStoredProcedure } = require("../config/db_connection");
+const express = require('express');
+const { executeStoredProcedure } = require('../config/db_connection');
 
-const router = express.router;
+const router = express.Router();
 
-//Get All Transactions for a User
-router.get('./transactions/:userID', async (req, res) => {
+// Get all transactions for a user
+router.get('api/transactions/:userId', async (req, res) => { 
     try {
-        const {userId} = req.params;
-        const {startDate, endDate, categoryId, transactionType} = req.query;
+        const { userId } = req.params;
+        const { startDate, endDate, categoryId, transactionType } = req.query;
 
         const userIdInt = parseInt(userId);
-        if(isNaN(userIdInt) || userIdInt <= 0){
-            return res.status(400).json({
-                error: "Invalid User Id"
-            });
+        if (isNaN(userIdInt) || userIdInt <= 0) {
+            return res.status(400).json({ error: 'Invalid user ID' });
         }
 
-        const parameters = {UserID: userIdInt};
-        if(startDate) parameters.StartDate = startDate;
-        if(endDate) parameters.EndDate = endDate;
-        if(categoryId) parameters.CategoryID = parseInt(categoryId);
-        if(transactionType) parameters.TransactionType = transactionType;
+        const parameters = { UserID: userIdInt };
+        if (startDate) parameters.StartDate = startDate;
+        if (endDate) parameters.EndDate = endDate;
+        if (categoryId) parameters.CategoryId = parseInt(categoryId);
+        if (transactionType) parameters.TransactionType = transactionType;
 
-        const transactions = await executeStoredProcedure('sp_getUserTransactions', parameters);
-
+        const transactions = await executeStoredProcedure('sp_GetUserTransactions', parameters);
+        
         res.json({
             success: true,
             transactions: transactions,
@@ -39,21 +37,18 @@ router.get('./transactions/:userID', async (req, res) => {
     }
 });
 
-//Add a New transaction
-router.get('./transactions', async (req, res) => {
+// Add new transaction
+router.post('/transactions', async (req, res) => {
     try {
-        const { userId, amount, description, transactionDate, categoryId, transactionType} = req.body;
+        const { userId, amount, description, transactionDate, categoryId, transactionType } = req.body;
 
-        if(!userId || !amount || !description || !transactionDate || !categoryId || !transactionType){
-            return res.status(400).json({
-                error: 'Missing required fields'
-            });
+        // Validation
+        if (!userId || !amount || !description || !transactionDate || !categoryId || !transactionType) {
+            return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        if(!['Income', 'Expense'].includes(transactionType)){
-            return res.status(400).json({
-                error: 'Transaction type must be Income or Expense'
-            });
+        if (!['Income', 'Expense'].includes(transactionType)) {
+            return res.status(400).json({ error: 'Transaction type must be Income or Expense' });
         }
 
         const parameters = {
@@ -61,16 +56,16 @@ router.get('./transactions', async (req, res) => {
             Amount: parseFloat(amount),
             Description: description,
             TransactionDate: transactionDate,
-            CategoryID: parseInt(categoryId),
+            CategoryId: parseInt(categoryId),
             TransactionType: transactionType
         };
 
         const result = await executeStoredProcedure('sp_AddTransaction', parameters);
-
+        
         res.status(201).json({
             success: true,
             message: 'Transaction added successfully',
-            transctionId: result[0]?.NewTransactionID
+            transactionId: result[0]?.NewTransactionID
         });
 
     } catch (error) {
@@ -82,19 +77,19 @@ router.get('./transactions', async (req, res) => {
     }
 });
 
-//Get the Categories for a user
-router.get('./categories/:userID', async (req, res) => {
+// Get categories for user
+router.get('/categories/:userId', async (req, res) => {
     try {
-        const {userId} = req.params;
-        const {categoryType} = req.query;
+        const { userId } = req.params;
+        const { categoryType } = req.query;
 
-        const parameters = {UserID: parseInt(userId)};
+        const parameters = { UserID: parseInt(userId) };
         if (categoryType) parameters.CategoryType = categoryType;
 
         const categories = await executeStoredProcedure('sp_GetUserCategories', parameters);
-
+        
         res.json({
-            success:true,
+            success: true,
             categories: categories
         });
 
@@ -107,4 +102,5 @@ router.get('./categories/:userID', async (req, res) => {
     }
 });
 
+// IMPORTANT: Export the router
 module.exports = router;

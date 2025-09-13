@@ -15,7 +15,7 @@ CREATE OR ALTER PROCEDURE sp_GetUserTransactions
     @UserID INT,
     @StartDate DATE = NULL,
     @EndDate DATE = NULL,
-    @CategoryID INT NULL,
+    @CategoryID INT = NULL,
     @TransactionType NVARCHAR(10) = NULL -- Income or Expense
 AS
 BEGIN
@@ -36,6 +36,7 @@ BEGIN
         ON t.CategoryID = c.CategoryID
     WHERE t.UserID = @UserID
       AND t.IsActive = 1
+      AND c.IsActive = 1
       AND (@StartDate IS NULL OR t.TransactionDate >= @StartDate)
       AND (@EndDate IS NULL OR t.TransactionDate <= @EndDate)
       AND (@CategoryID IS NULL OR t.CategoryID = @CategoryID)
@@ -50,7 +51,7 @@ CREATE OR ALTER PROCEDURE sp_AddTransaction
     @Amount DECIMAL(10,2),
     @Description NVARCHAR(255),
     @TransactionDate DATE,
-    @CategoryID INT NULL,
+    @CategoryID INT,
     @TransactionType NVARCHAR(10)
 AS
 BEGIN
@@ -66,10 +67,11 @@ BEGIN
         SELECT 1 FROM Categories
         WHERE CategoryID = @CategoryID
           AND CategoryType = @TransactionType
+          AND IsActive = 1
     )
 
     BEGIN
-        RAISERROR('Invalid Category for this transcation type',16,1);
+        RAISERROR('Invalid Category for this transaction type',16,1);
         RETURN;
     END;
 

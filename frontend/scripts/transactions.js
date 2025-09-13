@@ -45,8 +45,13 @@ async function loadCategories(userId = 1, transactionType = null) {
         if (transactionType) {
             url += `?categoryType=${transactionType}`;
         }
-        
+
         const response = await fetch(url);
+    
+        if (!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         
         const categorySelect = document.getElementById('category');
@@ -116,6 +121,13 @@ function showNotification(message, type) {
     setTimeout(() => notification.remove(), 3000);
 }
 
+function formatCurrency(amount){
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     loadTransactions();
     loadCategories();
@@ -138,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             amount: formData.get('amount'),
             description: formData.get('description'),
             transactionDate: formData.get('transactionDate'),
-            categoryId: formData.get('categoryId'),
+            CategoryID: formData.get('CategoryID'),
             transactionType: formData.get('transactionType')
         };
         
