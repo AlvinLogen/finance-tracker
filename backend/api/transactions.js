@@ -4,7 +4,7 @@ const { executeStoredProcedure } = require('../config/db_connection');
 const router = express.Router();
 
 // Get all transactions for a user
-router.get('api/transactions/:userId', async (req, res) => { 
+router.get('/api/transactions/:userId', async (req, res) => { 
     try {
         const { userId } = req.params;
         const { startDate, endDate, categoryId, transactionType } = req.query;
@@ -38,7 +38,7 @@ router.get('api/transactions/:userId', async (req, res) => {
 });
 
 // Add new transaction
-router.post('/transactions', async (req, res) => {
+router.post('/api/transactions', async (req, res) => {
     try {
         const { userId, amount, description, transactionDate, categoryId, transactionType } = req.body;
 
@@ -56,7 +56,7 @@ router.post('/transactions', async (req, res) => {
             Amount: parseFloat(amount),
             Description: description,
             TransactionDate: transactionDate,
-            CategoryId: parseInt(categoryId),
+            CategoryID: parseInt(categoryId),
             TransactionType: transactionType
         };
 
@@ -78,7 +78,7 @@ router.post('/transactions', async (req, res) => {
 });
 
 // Get categories for user
-router.get('/categories/:userId', async (req, res) => {
+router.get('/api/categories/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const { categoryType } = req.query;

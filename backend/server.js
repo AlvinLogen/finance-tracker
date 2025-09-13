@@ -1,12 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { testConnection } = require('./config/db_connection');
-
+const { testConnection, getConnection } = require('./config/db_connection');
 const settings = require("./config/settings");
-
-//Route Files
-const dashboardRoutes = require(`.${settings.api.baseURL}/dashboard`);
-const transactionRoutes = require(`.${settings.api.baseURL}/transactions`);
 
 const app = express();
 
@@ -14,9 +9,13 @@ const app = express();
 app.use(cors(settings.cors))
 app.use(express.json());
 
+//Route Files
+const dashboardRoutes = require('./api/dashboard');
+const transactionRoutes = require('./api/transactions');
+
 //Routes
-app.use(settings.api.baseURL, dashboardRoutes);
-app.use(settings.api.baseURL, transactionRoutes);
+app.use('/', dashboardRoutes)
+app.use('/',transactionRoutes);
 
 app.get(`${settings.api.baseURL}/test`, async (req, res) => {
     try {
@@ -36,8 +35,18 @@ app.get(`${settings.api.baseURL}/test`, async (req, res) => {
     }
 });
 
-app.listen(settings.server.port, async () => {
-    console.log(`Server running at http://${settings.server.host}:${settings.server.port}`);
-    console.log(`Test Endpoint: http://${settings.server.host}:${settings.server.port}${settings.api.baseURL}/test`);  
-    console.log(`Dashboard: http://localhost:${settings.server.port}/api/dashboard/summary/1`);
-});
+async function startServer() {
+    try{
+        await getConnection();
+        app.listen(settings.server.port, async () => {
+        console.log(`Server running at http://${settings.server.host}:${settings.server.port}`);
+        console.log(`Test Endpoint: http://${settings.server.host}:${settings.server.port}${settings.api.baseURL}/test`);  
+        console.log(`Dashboard: http://localhost:${settings.server.port}/api/dashboard/summary/1`);
+        });
+    } catch (error){
+        console.error('Database connection failed. Please check your database configuration.');
+        process.exit(1);
+    }
+}
+
+startServer();
