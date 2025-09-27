@@ -28,13 +28,17 @@ CREATE TABLE
         CreatedDate DATETIME2 NOT NULL DEFAULT GETDATE(),
         ModifiedDate DATETIME2 NOT NULL DEFAULT GETDATE(),
         IsActive BIT NOT NULL DEFAULT 1,
+        UserName NVARCHAR(50) NOT NULL UNIQUE,
+        PasswordHash NVARCHAR(255) NOT NULL,
+        LastLoginDate DATETIME2 NULL
 
         CONSTRAINT CK_Users_Email_Format CHECK (Email LIKE '%@%.%'),
         CONSTRAINT CK_Users_FirstName_NotEmpty CHECK (LEN(TRIM(FirstName)) > 0),
         CONSTRAINT CK_Users_LastName_NotEmpty CHECK (LEN(TRIM(LastName)) > 0)
-    );
+);
 
     CREATE INDEX IDX_Users_Email ON Users(Email);
+    CREATE INDEX IX_Users_Username ON Users(UserName);
 
     PRINT 'Users table created successfully.';
 END

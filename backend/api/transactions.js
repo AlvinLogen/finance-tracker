@@ -1,17 +1,25 @@
 const express = require('express');
 const { executeStoredProcedure } = require('../config/db_connection');
+const authenticateToken = require('../middleware/token');
 
 const router = express.Router();
 
 // Get all transactions for a user
-router.get('/api/transactions/:userId', async (req, res) => { 
+router.get('/api/transactions/:userId', authenticateToken, async (req, res) => { 
     try {
         const { userId } = req.params;
         const { startDate, endDate, categoryId, transactionType } = req.query;
 
         const userIdInt = parseInt(userId);
+        if (userIdInt !== req.user.userId){
+            return res.status(403).json({
+                success:false,
+                error: 'Access denied: You can only view your own transactions'
+            });
+        }
+
         if (isNaN(userIdInt) || userIdInt <= 0) {
-            return res.status(400).json({ error: 'Invalid user ID' });
+            return res.status(400).json({ success: false, error: 'Invalid user ID' });
         }
 
         const parameters = { UserID: userIdInt };
@@ -38,10 +46,11 @@ router.get('/api/transactions/:userId', async (req, res) => {
 });
 
 // Add new transaction
-router.post('/api/transactions', async (req, res) => {
+router.post('/api/transactions', authenticateToken,async (req, res) => {
     try {
-        const { userId, amount, description, transactionDate, categoryId, transactionType } = req.body;
+        const { amount, description, transactionDate, categoryId, transactionType } = req.body;
 
+        const userId = req.user.userId;
         // Validation
         if (!userId || !amount || !description || !transactionDate || !categoryId || !transactionType) {
             return res.status(400).json({ error: 'Missing required fields' });
@@ -78,10 +87,22 @@ router.post('/api/transactions', async (req, res) => {
 });
 
 // Get categories for user
-router.get('/api/categories/:userId', async (req, res) => {
+router.get('/api/categories/:userId', authenticateToken,async (req, res) => {
     try {
         const { userId } = req.params;
         const { categoryType } = req.query;
+
+        const userIdInt = parseInt(userId);
+        if (userIdInt !== req.user.userId){
+            return res.status(403).json({
+                success:false,
+                error: 'Access denied: You can only view your own transactions'
+            });
+        }
+
+        if (isNaN(userIdInt) || userIdInt <= 0) {
+            return res.status(400).json({ success: false, error: 'Invalid user ID' });
+        }
 
         const parameters = { UserID: parseInt(userId) };
         if (categoryType) parameters.CategoryType = categoryType;
@@ -102,5 +123,4 @@ router.get('/api/categories/:userId', async (req, res) => {
     }
 });
 
-// IMPORTANT: Export the router
 module.exports = router;

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { testConnection, getConnection } = require('./config/db_connection');
 const settings = require("./config/settings");
 
@@ -8,12 +9,15 @@ const app = express();
 //Settings Configuration
 app.use(cors(settings.cors))
 app.use(express.json());
+app.use(cookieParser());
 
 //Route Files
+const authRoutes = require('./api/authentication');
 const dashboardRoutes = require('./api/dashboard');
 const transactionRoutes = require('./api/transactions');
 
 //Routes
+app.use('/',authRoutes);
 app.use('/', dashboardRoutes)
 app.use('/',transactionRoutes);
 
@@ -40,6 +44,7 @@ async function startServer() {
         await getConnection();
         app.listen(settings.server.port, async () => {
         console.log(`Server running at http://${settings.server.host}:${settings.server.port}`);
+        console.log(`Auth: http://${settings.server.host}:${settings.server.port}/api/authentication/`)
         console.log(`Test Endpoint: http://${settings.server.host}:${settings.server.port}${settings.api.baseURL}/test`);  
         console.log(`Dashboard: http://localhost:${settings.server.port}/api/dashboard/summary/1`);
         });
